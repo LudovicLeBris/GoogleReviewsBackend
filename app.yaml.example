@@ -1,0 +1,10 @@
+runtime: nodejs20
+
+env_variables:
+  APIKEY: "YOUR-GOOGLE-MAP-API-KEY"
+
+handlers:
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto
