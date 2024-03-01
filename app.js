@@ -1,4 +1,5 @@
 const express = require('express');
+let cors = require('cors')
 const sequelize = require('./src/db/sequelize.js')
 let cron = require('node-cron')
 const updateProcess = require('./src/services/googleapi.js')
@@ -6,6 +7,8 @@ const {Places, Reviews} = require('./src/db/sequelize.js')
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors())
 
 sequelize.initDb()
 
