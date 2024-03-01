@@ -46,7 +46,9 @@ function saveReviews(placeId, placeData) {
                 console.log('UPDATE !!!')
                 for (let index = 0; index < reviews.length; index++) {
                     Reviews.update({
-                        author: placeData.reviews[index].authorAttribution.displayName,
+                        authorName: placeData.reviews[index].authorAttribution.displayName,
+                        authorImage: placeData.reviews[index].authorAttribution.photoUri,
+                        authorUri: placeData.reviews[index].authorAttribution.uri,
                         rating: placeData.reviews[index].rating,
                         publishedDate: placeData.reviews[index].publishTime,
                         content: placeData.reviews[index].originalText.text
@@ -57,7 +59,9 @@ function saveReviews(placeId, placeData) {
                 placeData.reviews.forEach(review => {
                     Reviews.create({
                         PlaceId: placeId,
-                        author: review.authorAttribution.displayName,
+                        authorName: review.authorAttribution.displayName,
+                        authorImage: review.authorAttribution.photoUri,
+                        authorUri: review.authorAttribution.uri,
                         rating: review.rating,
                         publishedDate: review.publishTime,
                         content: review.originalText.text
@@ -71,7 +75,9 @@ function saveReviews(placeId, placeData) {
                 placeData.reviews.forEach(review => {
                     Reviews.create({
                         PlaceId: placeId,
-                        author: review.authorAttribution.displayName,
+                        authorName: review.authorAttribution.displayName,
+                        authorImage: review.authorAttribution.photoUri,
+                        authorUri: review.authorAttribution.uri,
                         rating: review.rating,
                         publishedDate: review.publishTime,
                         content: review.originalText.text

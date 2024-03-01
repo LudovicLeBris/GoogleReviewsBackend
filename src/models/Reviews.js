@@ -5,7 +5,15 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        author: {
+        authorName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        authorImage: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        authorUri: {
             type: DataTypes.STRING,
             allowNull: false
         },
