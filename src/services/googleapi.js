@@ -91,12 +91,12 @@ function saveReviews(placeId, placeData) {
 async function updateProcess(placeId) {
     const apiData = await getGooglePlaceData(process.env.APIKEY, placeId)
     // const apiData = await fakeData
-    if (!apiData.errors) {
+    if ("errors" in apiData || "error" in apiData) {
+        return apiData
+    } else {
         await savePlace(placeId, apiData)
         await saveReviews(placeId, apiData)
         return {"success": "Process correctly done one place"}
-    } else {
-        return apiData
     }
 }
 
