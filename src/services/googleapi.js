@@ -1,5 +1,6 @@
 const fetch = require('node-fetch')
 const {Places, Reviews} = require('../db/sequelize')
+const reviewsCollection = require('../db/firestore')
 const fakeData = require('../services/responseExample')
 
 // Required fields for Google place api(new)
@@ -16,6 +17,28 @@ async function getGooglePlaceData(apiKey, placeId) {
     const response = await fetch(apiURL)
     const data = await response.json()
     return Promise.resolve(data)
+}
+
+async function saveReview(placeId, placeData) {
+    const placeIdRef = reviewsCollection.doc(placeId)
+    let place = {
+        id: placeId,
+        name: placeData.displayName.text,
+        rating: placeData.rating,
+        reviewCount: placeData.userRatingCount,
+        Reviews : []
+    }
+    placeData.reviews.forEach(review => {
+        place.Reviews.push({
+            authorName: review.authorAttribution.displayName,
+            authorImage: review.authorAttribution.photoUri,
+            authorUri: review.authorAttribution.uri,
+            rating: review.rating,
+            publishedDate: review.publishTime,
+            content: review.originalText.text
+        })
+    })
+    await placeIdRef.set({place})
 }
 
 function savePlace(placeId, placeData) {
@@ -91,13 +114,20 @@ function saveReviews(placeId, placeData) {
 async function updateProcess(placeId) {
     const apiData = await getGooglePlaceData(process.env.APIKEY, placeId)
     // const apiData = await fakeData
+    // if ("errors" in apiData || "error" in apiData) {
+    //     return apiData
+    // } else {
+    //     await savePlace(placeId, apiData)
+    //     await saveReviews(placeId, apiData)
+    //     return {"success": "Process correctly done one place"}
+    // }
     if ("errors" in apiData || "error" in apiData) {
         return apiData
     } else {
-        await savePlace(placeId, apiData)
-        await saveReviews(placeId, apiData)
+        saveReview(placeId, apiData)
         return {"success": "Process correctly done one place"}
     }
+
 }
 
 module.exports = updateProcess
